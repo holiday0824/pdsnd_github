@@ -157,7 +157,7 @@ def user_stats(df):
         common_birth = int(df['Birth Year'].mode()[0])
 
 
-    # Display counts of gender
+    # Display gender distribution
     print('The gender distibution of riders\n{}\n\nThe earliest birth year is {}.\nThe most recent birth year is {}.\nThe most common birth year is {}.'.format(gender_ct, birth_young, recent_birth, common_birth))
     
 
