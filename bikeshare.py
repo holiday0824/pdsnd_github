@@ -164,38 +164,44 @@ def user_stats(df):
     print("\nThis query took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
-def raw_data(city, df):
+def collect_raw():
+    def raw_data(city, df):
     #Checks if the user would like to see a raw data export and prints 5 rows at a time
-    first_row = 0
-    last_row = 5
-    while True:
-        raw = input('\nWould you like me to print the next 5 rows of raw data for {} with the current filters? Please enter Yes or No.'.format(city.title()).lower())
-        if raw == 'yes':
-           print(df.iloc[first_row:last_row])
-           first_row += 5
-           last_row +=5
-        elif raw == 'no':
-            break
-        else:
-            print('That choice is invalid. Please retry your request. \n' )
+        first_row = 0
+        last_row = 5
+        while True:
+            raw = input('\nWould you like me to print the next 5 rows of raw data for {} with the current filters? Please enter Yes or No.'.format(city.title()).lower())
+            if raw == 'yes':
+               print(df.iloc[first_row:last_row])
+               first_row += 5
+               last_row +=5
+            elif raw == 'no':
+                break
+            else:
+                print('That choice is invalid. Please retry your request. \n' )
+    return raw_data
+
+raw_data = collect_raw()
 
 
 
 
-def main():
-    while True:
-        city, month, day = get_filters()
-        df = load_data(city, month, day)
+def data_dump(get_filters, load_data, time_stats, station_stats, trip_duration_stats, user_stats, raw_data):
+    def main():
+        while True:
+            city, month, day = get_filters()
+            df = load_data(city, month, day)
+            time_stats(df)
+            station_stats(df)
+            trip_duration_stats(df)
+            user_stats(df)
+            raw_data(city,df)
+            restart = input('\nWould you like to restart? Enter yes or no.\n')
+            if restart.lower() != 'yes':
+                break
+    return main
 
-        time_stats(df)
-        station_stats(df)
-        trip_duration_stats(df)
-        user_stats(df)
-        raw_data(city,df)
-
-        restart = input('\nWould you like to restart? Enter yes or no.\n')
-        if restart.lower() != 'yes':
-            break
+main = data_dump(get_filters, load_data, time_stats, station_stats, trip_duration_stats, user_stats, raw_data)
 
 
 if __name__ == "__main__":
